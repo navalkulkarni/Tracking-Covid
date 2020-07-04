@@ -7,12 +7,36 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/appLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.36" />
+
+    <Button
+        android:id="@+id/addUserButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/add_user"
+        app:layout_constraintEnd_toEndOf="@+id/appLogo"
+        app:layout_constraintStart_toStartOf="@+id/appLogo"
+        app:layout_constraintTop_toBottomOf="@+id/appLogo" />
+
+    <Button
+        android:id="@+id/takeReadingButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/take_reading"
+        app:layout_constraintEnd_toEndOf="@+id/addUserButton"
+        app:layout_constraintStart_toStartOf="@+id/addUserButton"
+        app:layout_constraintTop_toBottomOf="@+id/addUserButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
