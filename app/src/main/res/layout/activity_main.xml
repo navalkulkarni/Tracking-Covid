@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.36" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/addUserButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="@+id/appLogo"
         app:layout_constraintTop_toBottomOf="@+id/appLogo" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/takeReadingButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
