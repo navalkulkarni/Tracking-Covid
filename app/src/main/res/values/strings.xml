@@ -10,4 +10,5 @@
     <string name="create_user">Create User</string>
     <string name="app_label">Tracking Covid</string>
     <string name="search_hint">Enter Mobile Number</string>
+    <string name="search_user">Search User</string>
 </resources>

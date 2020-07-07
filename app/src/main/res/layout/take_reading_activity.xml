@@ -7,24 +7,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.TakeReadingActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/mobileNumberEditText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/take_reading"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:hint="@string/mobile_number"
+        android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/searchUserButton"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:text="@string/search_user"
+        app:layout_constraintEnd_toEndOf="@+id/mobileNumberEditText"
+        app:layout_constraintStart_toStartOf="@+id/mobileNumberEditText"
+        app:layout_constraintTop_toBottomOf="@+id/mobileNumberEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
