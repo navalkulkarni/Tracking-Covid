@@ -8,4 +8,6 @@
     <string name="full_name">Full Name</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="create_user">Create User</string>
+    <string name="app_label">Tracking Covid</string>
+    <string name="search_hint">Enter Mobile Number</string>
 </resources>
