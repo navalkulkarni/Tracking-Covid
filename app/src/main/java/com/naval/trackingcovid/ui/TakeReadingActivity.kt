@@ -47,24 +47,26 @@ class TakeReadingActivity : AppCompatActivity() {
             var readingListOfUser:OxygenReadings? = findReadingListOfUser(user)
             if(readingListOfUser == null)
             {
-                Log.d(TAG, "new reading")
                 val readingListForFirstTimeUser: MutableList<String> =
                     mutableListOf(readingEditText.text.toString())
                 val firstList =
                     OxygenReadings(0,dateTime,readingListForFirstTimeUser,user.mobileNo)
                 covidDB.oxygenReadingDao().insertReading(firstList)
-                val size =setReadingLeftTextView(firstList)
+                val size = setReadingLeftTextView(firstList)
                 readingRemainingTextView.text =  "$size readings left"
+
             }
             else{
-                Log.d(TAG, "reading taken")
+
                 readingListOfUser.oxygenReadings.add(reading)
                 covidDB.oxygenReadingDao().updateReading(readingListOfUser)
                 val size =setReadingLeftTextView(readingListOfUser)
                 readingRemainingTextView.text =  "$size readings left"
+
             }
         }
     }
+
 
     private fun setReadingLeftTextView(firstList: OxygenReadings):String {
         var size = 5;
@@ -79,17 +81,20 @@ class TakeReadingActivity : AppCompatActivity() {
     private fun setupClickListenerForSearchUser() {
         searchUserButton.setOnClickListener {
             val query = mobileNumberEditText.text.toString()
-            var size = 0
+            var size = ""
             user = covidDB.userDao().getUserByMobileNumber(query)
             var readingListOfUser:OxygenReadings? = findReadingListOfUser(user)
             if(readingListOfUser?.oxygenReadings == null)
-                 size = 5
+                 size = "5"
+            else{
+                size = setReadingLeftTextView(readingListOfUser)
+            }
             if(user!= null)
                 showReadingView(size)
         }
     }
 
-    private fun showReadingView(size:Int) {
+    private fun showReadingView(size:String) {
         readingRemainingTextView.text = "$size readings left"
         readingRemainingTextView.visibility = View.VISIBLE
         userInfoTextView.visibility = View.VISIBLE
