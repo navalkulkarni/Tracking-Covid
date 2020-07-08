@@ -12,6 +12,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
 import com.naval.trackingcovid.model.User
+import com.naval.trackingcovid.utils.Validation
+import com.naval.trackingcovid.utils.Validation.Companion.both_inputs_correct
+import com.naval.trackingcovid.utils.Validation.Companion.both_inputs_wrong
+import com.naval.trackingcovid.utils.Validation.Companion.full_name_wrong
+import com.naval.trackingcovid.utils.Validation.Companion.mobile_number_wrong
 import kotlinx.android.synthetic.main.add_user_activity.*
 import java.time.LocalDateTime
 
@@ -48,7 +53,7 @@ class AddUserActivity : AppCompatActivity(){
                 val user = User(fullName = fullNameEditText.text.toString(),
                                 mobileNo = mobNumberEditText.text.toString(),
                                 createdDate = LocalDateTime.now())
-                //insertUserToDb(user)
+                insertUserToDb(user)
             }
         }
 
@@ -71,15 +76,15 @@ class AddUserActivity : AppCompatActivity(){
         val fullName = fullNameEditText.text.toString()
         val mobileNumber = mobNumberEditText.text.toString()
 
-        // if both are not empty
-        when (fullName.isNotEmpty() && mobileNumber.isNotEmpty()){
-            //if both are incorrect
-            !fullName.matches(Regex("[^0-9]{6,60}")) && !mobileNumber.matches(Regex("[6-9]{1}[0-9]{9}")) -> Toast.makeText(this,"Invalid Input",Toast.LENGTH_LONG).show()
-            //if name is incorrect
-            !fullName.matches(Regex("[^0-9]{6,60}")) && mobileNumber.matches(Regex("[6-9]{1}[0-9]{9}")) ->Toast.makeText(this,"Invalid Name",Toast.LENGTH_LONG).show()
-            //if mobile number is incorrect
-            !mobileNumber.matches(Regex("[6-9]{1}[0-9]{9}")) && fullName.matches(Regex("[^0-9]{6,60}")) ->Toast.makeText(this,"Invalid Mobile Number",Toast.LENGTH_LONG)  .show()
-            else -> return true
+        val validationResult = Validation.validateUserCreationInput(fullName, mobileNumber)
+        Log.d(TAG, validationResult.toString())
+        when(validationResult){
+            0 -> {
+                Toast.makeText(this,both_inputs_correct,Toast.LENGTH_LONG).show()
+                return true}
+            1 -> Toast.makeText(this,both_inputs_wrong,Toast.LENGTH_LONG).show()
+            2 -> Toast.makeText(this,full_name_wrong,Toast.LENGTH_LONG).show()
+            3 -> Toast.makeText(this, mobile_number_wrong,Toast.LENGTH_LONG).show()
         }
 
         return false
