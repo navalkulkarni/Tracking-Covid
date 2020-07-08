@@ -1,25 +1,22 @@
 package com.naval.trackingcovid.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import java.time.LocalDateTime
 
 
-@Entity(tableName = "users")
+@Entity(tableName = "users",indices = arrayOf(Index(value = ["mobile_number"])))
 data class User(
-
-    @PrimaryKey(autoGenerate = true)
-    val id: String,
 
     @ColumnInfo(name = "full_name")
     val fullName: String,
 
+    @PrimaryKey
     @ColumnInfo(name = "mobile_number")
     val mobileNo:String,
 
-    @ColumnInfo(name = "reading_list")
-    val readingsList : Array<Int> = arrayOf(0,0,0,0,0)
+    @ColumnInfo(name = "creation_date")
+    val createdDate:LocalDateTime
 ) {
+
 
 }

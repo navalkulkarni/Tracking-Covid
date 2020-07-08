@@ -1,10 +1,9 @@
-package com.naval.trackingcovid
+package com.naval.trackingcovid.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.naval.trackingcovid.ui.AddUserActivity
-import com.naval.trackingcovid.ui.TakeReadingActivity
+import com.naval.trackingcovid.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

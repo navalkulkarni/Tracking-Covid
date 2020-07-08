@@ -73,6 +73,9 @@ dependencies {
     //paracamera
     implementation 'com.mindorks:paracamera:0.2.2'
 
+    //networking dependency
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
+
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"

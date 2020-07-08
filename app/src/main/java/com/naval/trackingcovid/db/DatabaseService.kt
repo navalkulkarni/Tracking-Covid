@@ -4,14 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.naval.trackingcovid.model.DayWiseReadings
+import androidx.room.TypeConverters
+import com.naval.trackingcovid.model.OxygenReadings
 import com.naval.trackingcovid.model.User
 
-@Database(entities = [User::class,DayWiseReadings::class],version = 1)
+@Database(entities = [User::class,OxygenReadings::class],version = 1)
+@TypeConverters(Converters::class)
 abstract class DatabaseService : RoomDatabase() {
 
     abstract fun userDao():UserDao
-    abstract fun dayWiseReadingDao():DayWiseReadingsDao
+    abstract fun oxygenReadingDao():OxygenReadingsDao
 
     companion object{
         lateinit var INSTANCE : DatabaseService
