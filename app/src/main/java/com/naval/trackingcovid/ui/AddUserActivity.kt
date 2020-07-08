@@ -36,6 +36,7 @@ class AddUserActivity : AppCompatActivity(){
         setContentView(R.layout.add_user_activity)
         Log.d(TAG,"In Add User Acitivity")
         covidDB = DatabaseService.getInstance(this)
+
         bindViews()
         setupClickListeners()
 

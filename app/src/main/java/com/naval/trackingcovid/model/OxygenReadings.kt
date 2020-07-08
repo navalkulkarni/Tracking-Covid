@@ -15,7 +15,7 @@ data class OxygenReadings(
     val readingDateTime: LocalDateTime,
 
     @ColumnInfo(name = "oxygen_readings")
-    val oxygenReadings: List<String>,
+    val oxygenReadings: MutableList<String>,
 
     @ColumnInfo(name = "owner_id")
     val userOwnerId:String

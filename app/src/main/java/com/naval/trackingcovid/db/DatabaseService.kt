@@ -14,6 +14,7 @@ abstract class DatabaseService : RoomDatabase() {
 
     abstract fun userDao():UserDao
     abstract fun oxygenReadingDao():OxygenReadingsDao
+    abstract fun userWithOxygenReadingsDao():UserWithOxygenReadingsDao
 
     companion object{
         lateinit var INSTANCE : DatabaseService

@@ -10,6 +10,6 @@ interface UserWithOxygenReadingsDao {
 
     @Transaction
     @Query("SELECT * FROM users")
-    fun getUsersWithReadings():List<UserWithOxygenReadings>
+    fun getUsersWithReadings():MutableList<UserWithOxygenReadings>
 
 }

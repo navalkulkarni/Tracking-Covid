@@ -3,12 +3,13 @@ package com.naval.trackingcovid.model
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class UserWithOxygenReadings(
-    @Embedded val user: User,
+ class UserWithOxygenReadings() {
+    @Embedded
+    lateinit var user: User
+
     @Relation(
         parentColumn = "mobile_number",
         entityColumn = "owner_id"
     )
-    val oxygenReadings : List<OxygenReadings>
-) {
+    lateinit var oxygenReadingsList : MutableList<OxygenReadings>
 }

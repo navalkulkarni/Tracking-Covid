@@ -1,9 +1,7 @@
 package com.naval.trackingcovid.db
 
-import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
 import com.naval.trackingcovid.model.User
 import java.sql.RowId
 
@@ -13,9 +11,11 @@ interface UserDao {
     @Query("SELECT * FROM users")
     fun getAllUsers():List<User>
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertUser(user: User):Long
 
+    @Query("DELETE FROM users")
+    fun deleteAllUsers()
 
     @Query("SELECT * FROM users WHERE mobile_number=:mobileNumber")
     fun getUserByMobileNumber( mobileNumber:String):User
