@@ -18,6 +18,7 @@ import com.naval.trackingcovid.utils.Validation.Companion.both_inputs_wrong
 import com.naval.trackingcovid.utils.Validation.Companion.full_name_wrong
 import com.naval.trackingcovid.utils.Validation.Companion.mobile_number_wrong
 import kotlinx.android.synthetic.main.add_user_activity.*
+import java.sql.RowId
 import java.time.LocalDateTime
 
 class AddUserActivity : AppCompatActivity(){
@@ -53,8 +54,7 @@ class AddUserActivity : AppCompatActivity(){
                 val user = User(fullName = fullNameEditText.text.toString(),
                                 mobileNo = mobNumberEditText.text.toString(),
                                 createdDate = LocalDateTime.now())
-                insertUserToDb(user)
-            }
+                insertUserToDb(user)            }
         }
 
         startTakingReadingButton.setOnClickListener {
@@ -63,11 +63,11 @@ class AddUserActivity : AppCompatActivity(){
         }
     }
 
-    private fun insertUserToDb(user: User) {
-
+    private fun insertUserToDb(user: User) : String {
         val userDao = covidDB.userDao()
+        val rowId = userDao.insertUser(user)
 
-        Log.d(TAG,userDao.insertUser(user).toString())
+       return rowId.toString()
     }
 
 
@@ -77,7 +77,7 @@ class AddUserActivity : AppCompatActivity(){
         val mobileNumber = mobNumberEditText.text.toString()
 
         val validationResult = Validation.validateUserCreationInput(fullName, mobileNumber)
-        Log.d(TAG, validationResult.toString())
+
         when(validationResult){
             0 -> {
                 Toast.makeText(this,both_inputs_correct,Toast.LENGTH_LONG).show()
