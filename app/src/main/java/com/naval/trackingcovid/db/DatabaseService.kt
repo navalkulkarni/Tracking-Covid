@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.naval.trackingcovid.model.OxygenReadings
 import com.naval.trackingcovid.model.User
 
-@Database(entities = [User::class,OxygenReadings::class],version = 2)
+@Database(entities = [User::class,OxygenReadings::class],version = 3)
 @TypeConverters(Converters::class)
 abstract class DatabaseService : RoomDatabase() {
 

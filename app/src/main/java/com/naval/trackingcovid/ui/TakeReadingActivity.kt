@@ -1,16 +1,14 @@
 package com.naval.trackingcovid.ui
 
-import android.app.SearchManager
-import android.content.Intent
+
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
+
 import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
 import com.naval.trackingcovid.model.OxygenReadings
@@ -24,7 +22,8 @@ class TakeReadingActivity : AppCompatActivity() {
     val TAG = "TakeReadingActivity"
     val TAG2 = "TakeActivityInIfBlock"
     lateinit var mobileNumberEditText: EditText
-    lateinit var readingEditText: EditText
+    lateinit var oxygenReadingEditText: EditText
+    lateinit var tempReadingEditText: EditText
     lateinit var user : User
     lateinit var covidDB : DatabaseService
 
@@ -41,28 +40,22 @@ class TakeReadingActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupClickListenerForConfirmReading() {
         confirmReadingButton.setOnClickListener {
+
             val dateTime = LocalDateTime.now()
-            val reading = readingEditText.text.toString()
+            val tempReading : String = tempReadingEditText.text.toString()
+            val oxygenReading = oxygenReadingEditText.text.toString()
 
             var readingListOfUser:OxygenReadings? = findReadingListOfUser(user)
             if(readingListOfUser == null)
-            {
-                val readingListForFirstTimeUser: MutableList<String> =
-                    mutableListOf(readingEditText.text.toString())
-                val firstList =
-                    OxygenReadings(0,dateTime,readingListForFirstTimeUser,user.mobileNo)
-                covidDB.oxygenReadingDao().insertReading(firstList)
-                val size = setReadingLeftTextView(firstList)
-                readingRemainingTextView.text =  "$size readings left"
-
-            }
+                insertReadingToDB()
             else{
-
-                readingListOfUser.oxygenReadings.add(reading)
+                readingListOfUser.readingDateTime = dateTime
+                readingListOfUser.temperatureReadings.add(tempReading)
+                readingListOfUser.oxygenReadings.add(oxygenReading)
                 covidDB.oxygenReadingDao().updateReading(readingListOfUser)
+                Log.d(TAG,findReadingListOfUser(user).toString())
                 val size =setReadingLeftTextView(readingListOfUser)
                 readingRemainingTextView.text =  "$size readings left"
-
             }
         }
     }
@@ -117,9 +110,28 @@ class TakeReadingActivity : AppCompatActivity() {
         return listFound
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun insertReadingToDB()
+    {
+        val dateTime = LocalDateTime.now()
+        val readingListForFirstTimeUser: MutableList<String> =
+            mutableListOf(readingEditText.text.toString())
+        val tempReadingListForFirstTimeUser: MutableList<String> =
+            mutableListOf(tempReadingEditText.text.toString())
+        val firstList = OxygenReadings(0,dateTime,
+            tempReadingListForFirstTimeUser,
+            readingListForFirstTimeUser,
+            user.mobileNo)
+        covidDB.oxygenReadingDao().insertReading(firstList)
+        val size = setReadingLeftTextView(firstList)
+        Log.d(TAG,findReadingListOfUser(user).toString())
+        readingRemainingTextView.text =  "$size readings left"
+    }
+
     private fun bindViews() {
         mobileNumberEditText = findViewById(R.id.mobileNumberEditText)
-        readingEditText = findViewById(R.id.readingEditText)
+        tempReadingEditText = findViewById(R.id.tempReadingEditText)
+        oxygenReadingEditText = findViewById(R.id.readingEditText)
     }
 
 

@@ -12,7 +12,10 @@ data class OxygenReadings(
     val id:Int,
 
     @ColumnInfo(name = "reading_date_and_time")
-    val readingDateTime: LocalDateTime,
+    var readingDateTime: LocalDateTime,
+
+    @ColumnInfo(name="temperature_reading")
+    val temperatureReadings: MutableList<String>,
 
     @ColumnInfo(name = "oxygen_readings")
     val oxygenReadings: MutableList<String>,
