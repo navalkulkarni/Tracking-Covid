@@ -15,6 +15,8 @@ import com.naval.trackingcovid.model.OxygenReadings
 import com.naval.trackingcovid.model.User
 import kotlinx.android.synthetic.main.take_reading_activity.*
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 class TakeReadingActivity : AppCompatActivity() {
@@ -83,15 +85,16 @@ class TakeReadingActivity : AppCompatActivity() {
                 size = setReadingLeftTextView(readingListOfUser)
             }
             if(user!= null)
-                showReadingView(size)
+                showReadingView(size,
+                    LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))!!)
         }
     }
 
-    private fun showReadingView(size:String) {
+    private fun showReadingView(size: String, format: String) {
         readingRemainingTextView.text = "$size readings left"
         readingRemainingTextView.visibility = View.VISIBLE
         userInfoTextView.visibility = View.VISIBLE
-        userInfoTextView.text = user.fullName
+        userInfoTextView.text = "You are taking reading of ${user.fullName}  at ${format}"
         readingEditText.visibility = View.VISIBLE
         confirmReadingButton.visibility = View.VISIBLE
     }
