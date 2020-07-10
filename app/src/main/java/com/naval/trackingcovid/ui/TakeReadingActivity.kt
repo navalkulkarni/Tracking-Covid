@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
-
 import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
 import com.naval.trackingcovid.model.OxygenReadings
@@ -27,10 +26,10 @@ import java.time.format.FormatStyle
 class TakeReadingActivity : AppCompatActivity() {
 
     val TAG = "TakeReadingActivity"
-    val TAG2 = "TakeActivityInIfBlock"
     lateinit var mobileNumberEditText: EditText
     lateinit var oxygenReadingEditText: EditText
     lateinit var tempReadingEditText: EditText
+    lateinit var userInfoTextView: TextView
     @RequiresApi(Build.VERSION_CODES.O)
     var user:User? = User("","", LocalDateTime.now())
     lateinit var covidDB : DatabaseService
@@ -62,6 +61,7 @@ class TakeReadingActivity : AppCompatActivity() {
                 if(!result){
                     MailSender.sendEmailToAuthorities(this,tempReading.toInt(),oxygenReading.toInt(),user,dateTime)
                 }
+                clearTextViews()
             }
             else{
                 readingListOfUser.readingDateTime = dateTime
@@ -74,8 +74,17 @@ class TakeReadingActivity : AppCompatActivity() {
                 if(!result){
                     MailSender.sendEmailToAuthorities(this,tempReading.toInt(),oxygenReading.toInt(),user,dateTime)
                 }
+                clearTextViews()
             }
         }
+    }
+
+    private fun clearTextViews() {
+        userInfoTextView.text = ""
+        mobileNumberEditText.text.clear()
+        tempReadingEditText.text.clear()
+        oxygenReadingEditText.text.clear()
+        readingRemainingTextView.text = ""
     }
 
 
@@ -120,7 +129,7 @@ class TakeReadingActivity : AppCompatActivity() {
     }
 
     private fun showReadingView(size: String, format: String) {
-        readingRemainingTextView.text = "$size readings left"
+        readingRemainingTextView.text = "$size readings left for today"
         readingRemainingTextView.visibility = View.VISIBLE
         userInfoTextView.visibility = View.VISIBLE
         userInfoTextView.text = "You are taking reading of ${user?.fullName}  at ${format}"
@@ -157,10 +166,11 @@ class TakeReadingActivity : AppCompatActivity() {
         covidDB.oxygenReadingDao().insertReading(firstList)
         val size = setReadingLeftTextView(firstList)
         Log.d(TAG,findReadingListOfUser(user).toString())
-        readingRemainingTextView.text =  "$size readings left"
+        readingRemainingTextView.text =  "$size readings left for today"
     }
 
     private fun bindViews() {
+        userInfoTextView = findViewById(R.id.userInfoTextView)
         mobileNumberEditText = findViewById(R.id.mobileNumberEditText)
         tempReadingEditText = findViewById(R.id.tempReadingEditText)
         oxygenReadingEditText = findViewById(R.id.readingEditText)

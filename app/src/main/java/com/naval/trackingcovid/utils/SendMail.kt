@@ -2,6 +2,7 @@ package com.naval.trackingcovid.utils
 
 import android.app.ProgressDialog
 import android.os.AsyncTask
+import android.widget.Toast
 import com.naval.trackingcovid.ui.TakeReadingActivity
 import javax.mail.Message
 import javax.mail.MessagingException
@@ -29,6 +30,7 @@ class SendMail(takeReadingActivity: TakeReadingActivity) : AsyncTask<Message, St
             return "Success"
         }catch( e : MessagingException){
             e.printStackTrace()
+            Toast.makeText(activityContext,"Something Went Wrong",Toast.LENGTH_LONG).show()
             return  "Error"
         }
     }
