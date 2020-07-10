@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -28,6 +29,7 @@ class AddUserActivity : AppCompatActivity(){
     lateinit var mobNumberEditText : TextInputEditText
     lateinit var user : User
     lateinit var covidDB : DatabaseService
+    lateinit var toast: Toast
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -36,7 +38,8 @@ class AddUserActivity : AppCompatActivity(){
         setContentView(R.layout.add_user_activity)
         Log.d(TAG,"In Add User Acitivity")
         covidDB = DatabaseService.getInstance(this)
-
+        toast = Toast.makeText(this,"",Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.CENTER,Gravity.CENTER_HORIZONTAL,Gravity.CENTER_VERTICAL)
         bindViews()
         setupClickListeners()
 
@@ -83,11 +86,21 @@ class AddUserActivity : AppCompatActivity(){
 
         when(validationResult){
             0 -> {
-                Toast.makeText(this,both_inputs_correct,Toast.LENGTH_LONG).show()
+                toast.setText(both_inputs_correct)
+                toast.show()
                 return true}
-            1 -> Toast.makeText(this,both_inputs_wrong,Toast.LENGTH_LONG).show()
-            2 -> Toast.makeText(this,full_name_wrong,Toast.LENGTH_LONG).show()
-            3 -> Toast.makeText(this, mobile_number_wrong,Toast.LENGTH_LONG).show()
+            1 -> {
+                toast.setText(both_inputs_wrong)
+                toast.show()
+            }
+            2 ->{
+                toast.setText(full_name_wrong)
+                toast.show()
+            }
+            3 -> {
+                toast.setText(mobile_number_wrong)
+                toast.show()
+            }
         }
 
         return false

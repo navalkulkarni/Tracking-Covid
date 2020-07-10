@@ -21,15 +21,15 @@ class MailSender {
 
         val sMail: String = "navalapps@gmail.com"
         val passWord : String = "Vindiesel##1"
-        val recipientMail = "ed@spinners.com"
-        val ccMail = sMail
+        val recipientMail = "navalapps@gmail.com"
+        val openingText = "Following person is Suspicious :"
         val subjectOfMail = "URGENT!!!Suspicious Reading Recorded"
-        var bodyOfMail = " Following person is Suspicious : "
+        var bodyOfMail = ""
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun sendEmailToAuthorities(takeReadingActivity: TakeReadingActivity, tempReading: Int, oxygenReading: Int, user: User?, dateTimeOfReading: LocalDateTime) {
 
-            bodyOfMail = bodyOfMail + "\n ${user?.fullName}" + "\n His Mobile Number is : ${user?.mobileNo}" + "\n His Temperature Reading is : ${tempReading}" + "\n His Oxygen Reading is : ${oxygenReading}" + "\n Reading was recorded at following time : ${dateTimeOfReading.format(
+            bodyOfMail = openingText + "\n ${user?.fullName}" + "\n His Mobile Number is : ${user?.mobileNo}" + "\n His Temperature Reading is : ${tempReading}" + "\n His Oxygen Reading is : ${oxygenReading}" + "\n Time at which reading was taken is : ${dateTimeOfReading.format(
                 DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))}"
 
             val properties = Properties()
@@ -37,6 +37,7 @@ class MailSender {
             properties.put("mail.smtp.starttls.enable","true")
             properties.put("mail.smtp.host","smtp.gmail.com")
             properties.put("mail.smtp.port","587")
+
 
             val session = Session.getInstance(properties, object: Authenticator(){
 
@@ -48,7 +49,6 @@ class MailSender {
             val message = MimeMessage(session)
             message.setFrom(InternetAddress(sMail))
             message.setRecipients(Message.RecipientType.TO, recipientMail)
-            message.setRecipients(Message.RecipientType.CC, ccMail)
             message.setSubject(subjectOfMail)
             message.setText(bodyOfMail)
 

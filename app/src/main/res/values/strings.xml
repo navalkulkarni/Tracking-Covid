@@ -2,16 +2,18 @@
     <!-- Splash Screen -->
     <string name="app_name">Tracking Covid</string>
     <string name="add_user">Add User</string>
-    <string name="take_reading">Take Reading</string>
+    <string name="take_reading">Start Taking Readings</string>
 
     <!-- Add User Screen -->
     <string name="full_name">Full Name</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="create_user">Create User</string>
     <string name="app_label">Tracking Covid</string>
+
+    <!-- Take Reading Screen -->
     <string name="search_hint">Enter Mobile Number</string>
     <string name="search_user">Search User</string>
-    <string name="confirm_reading">Confirm Reading ?</string>
+    <string name="confirm_reading">Enter Reading</string>
     <string name="oxygen_reading">Enter Oxygen Reading</string>
-    <string name="temp_reading">Enter Temperature Reading</string>
+    <string name="temp_reading">Enter Temp Reading</string>
 </resources>

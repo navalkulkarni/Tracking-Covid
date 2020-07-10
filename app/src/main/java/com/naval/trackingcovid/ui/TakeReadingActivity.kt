@@ -4,6 +4,7 @@ package com.naval.trackingcovid.ui
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -32,6 +33,7 @@ class TakeReadingActivity : AppCompatActivity() {
     lateinit var userInfoTextView: TextView
     @RequiresApi(Build.VERSION_CODES.O)
     var user:User? = User("","", LocalDateTime.now())
+   lateinit var toast: Toast
     lateinit var covidDB : DatabaseService
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -39,6 +41,7 @@ class TakeReadingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.take_reading_activity)
         covidDB = DatabaseService.getInstance(this)
+        toast = Toast.makeText(this,"User Does Not Exist",Toast.LENGTH_LONG)
         bindViews()
         setupClickListenerForSearchUser()
         setupClickListenerForConfirmReading()
@@ -122,7 +125,11 @@ class TakeReadingActivity : AppCompatActivity() {
                     LocalDateTime.now().
                     format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))!!)
             }else
-                Toast.makeText(this,"User Does not exist",Toast.LENGTH_SHORT).show()
+            {
+                toast.setGravity(Gravity.CENTER,Gravity.CENTER_HORIZONTAL,Gravity.CENTER_VERTICAL)
+                toast.show()
+
+            }
 
         }
 
@@ -165,7 +172,6 @@ class TakeReadingActivity : AppCompatActivity() {
             user?.mobileNo)
         covidDB.oxygenReadingDao().insertReading(firstList)
         val size = setReadingLeftTextView(firstList)
-        Log.d(TAG,findReadingListOfUser(user).toString())
         readingRemainingTextView.text =  "$size readings left for today"
     }
 

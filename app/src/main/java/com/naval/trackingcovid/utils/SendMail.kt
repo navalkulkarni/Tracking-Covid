@@ -30,7 +30,6 @@ class SendMail(takeReadingActivity: TakeReadingActivity) : AsyncTask<Message, St
             return "Success"
         }catch( e : MessagingException){
             e.printStackTrace()
-            Toast.makeText(activityContext,"Something Went Wrong",Toast.LENGTH_LONG).show()
             return  "Error"
         }
     }
