@@ -27,9 +27,9 @@ class MailSender {
         var bodyOfMail = " Following person is Suspicious : "
 
         @RequiresApi(Build.VERSION_CODES.O)
-        fun sendEmailToAuthorities(takeReadingActivity: TakeReadingActivity, tempReading: Int, oxygenReading: Int, user: User, dateTimeOfReading: LocalDateTime) {
+        fun sendEmailToAuthorities(takeReadingActivity: TakeReadingActivity, tempReading: Int, oxygenReading: Int, user: User?, dateTimeOfReading: LocalDateTime) {
 
-            bodyOfMail = bodyOfMail + "\n ${user.fullName}" + "\n His Mobile Number is : ${user.mobileNo}" + "\n His Temperature Reading is : ${tempReading}" + "\n His Oxygen Reading is : ${oxygenReading}" + "\n Reading was recorded at following time : ${dateTimeOfReading.format(
+            bodyOfMail = bodyOfMail + "\n ${user?.fullName}" + "\n His Mobile Number is : ${user?.mobileNo}" + "\n His Temperature Reading is : ${tempReading}" + "\n His Oxygen Reading is : ${oxygenReading}" + "\n Reading was recorded at following time : ${dateTimeOfReading.format(
                 DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))}"
 
             val properties = Properties()

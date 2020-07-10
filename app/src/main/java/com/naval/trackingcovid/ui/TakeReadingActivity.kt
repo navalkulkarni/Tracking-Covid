@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 
 import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
@@ -16,6 +18,7 @@ import com.naval.trackingcovid.model.User
 import com.naval.trackingcovid.utils.MailSender
 import com.naval.trackingcovid.utils.Validation
 import kotlinx.android.synthetic.main.take_reading_activity.*
+import java.lang.IllegalArgumentException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -28,7 +31,8 @@ class TakeReadingActivity : AppCompatActivity() {
     lateinit var mobileNumberEditText: EditText
     lateinit var oxygenReadingEditText: EditText
     lateinit var tempReadingEditText: EditText
-    lateinit var user : User
+    @RequiresApi(Build.VERSION_CODES.O)
+    var user:User? = User("","", LocalDateTime.now())
     lateinit var covidDB : DatabaseService
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -89,37 +93,49 @@ class TakeReadingActivity : AppCompatActivity() {
         searchUserButton.setOnClickListener {
             val query = mobileNumberEditText.text.toString()
             var size = ""
-            user = covidDB.userDao().getUserByMobileNumber(query)
-            var readingListOfUser:OxygenReadings? = findReadingListOfUser(user)
-            if(readingListOfUser?.oxygenReadings == null)
-                 size = "5"
-            else{
-                size = setReadingLeftTextView(readingListOfUser)
+            try {
+                 user = covidDB.userDao().getUserByMobileNumber(query)
+            }catch (e: IllegalArgumentException)
+            {
+                e.printStackTrace()
+
             }
-            if(user!= null)
+
+            if(user!=null)
+            {
+                var readingListOfUser:OxygenReadings? = findReadingListOfUser(user)
+                if(readingListOfUser?.oxygenReadings == null)
+                    size = "5"
+                else{
+                    size = setReadingLeftTextView(readingListOfUser)
+                }
                 showReadingView(size,
                     LocalDateTime.now().
                     format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))!!)
+            }else
+                Toast.makeText(this,"User Does not exist",Toast.LENGTH_SHORT).show()
+
         }
+
     }
 
     private fun showReadingView(size: String, format: String) {
         readingRemainingTextView.text = "$size readings left"
         readingRemainingTextView.visibility = View.VISIBLE
         userInfoTextView.visibility = View.VISIBLE
-        userInfoTextView.text = "You are taking reading of ${user.fullName}  at ${format}"
+        userInfoTextView.text = "You are taking reading of ${user?.fullName}  at ${format}"
         readingEditText.visibility = View.VISIBLE
         confirmReadingButton.visibility = View.VISIBLE
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun findReadingListOfUser(user: User) : OxygenReadings? {
+    private fun findReadingListOfUser(user: User?) : OxygenReadings? {
 
          var listFound: OxygenReadings? = null
         val userWithOxygenReadings = covidDB.userWithOxygenReadingsDao().getUsersWithReadings()
         userWithOxygenReadings.forEach {
             it.oxygenReadingsList.forEach {
-                if(it.userOwnerId == user.mobileNo)
+                if(it.userOwnerId == user?.mobileNo)
                     listFound = it
             }
         }
@@ -137,7 +153,7 @@ class TakeReadingActivity : AppCompatActivity() {
         val firstList = OxygenReadings(0,dateTime,
             tempReadingListForFirstTimeUser,
             readingListForFirstTimeUser,
-            user.mobileNo)
+            user?.mobileNo)
         covidDB.oxygenReadingDao().insertReading(firstList)
         val size = setReadingLeftTextView(firstList)
         Log.d(TAG,findReadingListOfUser(user).toString())

@@ -21,6 +21,6 @@ data class OxygenReadings(
     val oxygenReadings: MutableList<String>,
 
     @ColumnInfo(name = "owner_id")
-    val userOwnerId:String
+    val userOwnerId: String?
 ) {
 }
