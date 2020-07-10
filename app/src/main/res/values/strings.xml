@@ -12,4 +12,6 @@
     <string name="search_hint">Enter Mobile Number</string>
     <string name="search_user">Search User</string>
     <string name="confirm_reading">Confirm Reading ?</string>
+    <string name="oxygen_reading">Enter Oxygen Reading</string>
+    <string name="temp_reading">Enter Temperature Reading</string>
 </resources>

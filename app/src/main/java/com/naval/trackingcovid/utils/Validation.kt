@@ -1,8 +1,5 @@
 package com.naval.trackingcovid.utils
 
-import android.widget.Toast
-import com.naval.trackingcovid.ui.AddUserActivity
-
 class Validation {
 
     companion object{
@@ -11,6 +8,8 @@ class Validation {
         const val both_inputs_wrong = "Invalid Input"
         const val full_name_wrong = "Invalid Name"
         const val mobile_number_wrong = "Invalid Mobile Number"
+        const val temp_threshold = 35
+        const val oxygen_threshold = 90
 
         fun validateUserCreationInput(fullName:String,mobileNumber:String) : Int{
             // if both are not empty
@@ -24,6 +23,13 @@ class Validation {
                 else -> return 0
             }
 
+        }
+
+        fun validateReadingAndSendMail(tempReading: Int, oxygenReading: Int) : Boolean {
+
+            if(tempReading > temp_threshold && oxygenReading < oxygen_threshold)
+                return false
+            return true
         }
 
     }

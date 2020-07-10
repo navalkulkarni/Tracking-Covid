@@ -50,12 +50,14 @@ class AddUserActivity : AppCompatActivity(){
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupClickListeners() {
         createUserButton.setOnClickListener {
-            startTakingReadingButton.visibility = View.VISIBLE
+
             if(validations()){
                 val user = User(fullName = fullNameEditText.text.toString(),
                                 mobileNo = mobNumberEditText.text.toString(),
                                 createdDate = LocalDateTime.now())
-                insertUserToDb(user)            }
+                insertUserToDb(user)
+                startTakingReadingButton.visibility = View.VISIBLE
+            }
         }
 
         startTakingReadingButton.setOnClickListener {

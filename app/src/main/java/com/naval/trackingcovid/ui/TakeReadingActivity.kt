@@ -13,6 +13,8 @@ import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
 import com.naval.trackingcovid.model.OxygenReadings
 import com.naval.trackingcovid.model.User
+import com.naval.trackingcovid.utils.MailSender
+import com.naval.trackingcovid.utils.Validation
 import kotlinx.android.synthetic.main.take_reading_activity.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -48,8 +50,15 @@ class TakeReadingActivity : AppCompatActivity() {
             val oxygenReading = oxygenReadingEditText.text.toString()
 
             var readingListOfUser:OxygenReadings? = findReadingListOfUser(user)
+            val result: Boolean =
+                Validation.validateReadingAndSendMail(tempReading.toInt(),oxygenReading.toInt())
             if(readingListOfUser == null)
+            {
                 insertReadingToDB()
+                if(!result){
+                    MailSender.sendEmailToAuthorities(this,tempReading.toInt(),oxygenReading.toInt(),user,dateTime)
+                }
+            }
             else{
                 readingListOfUser.readingDateTime = dateTime
                 readingListOfUser.temperatureReadings.add(tempReading)
@@ -58,6 +67,9 @@ class TakeReadingActivity : AppCompatActivity() {
                 Log.d(TAG,findReadingListOfUser(user).toString())
                 val size =setReadingLeftTextView(readingListOfUser)
                 readingRemainingTextView.text =  "$size readings left"
+                if(!result){
+                    MailSender.sendEmailToAuthorities(this,tempReading.toInt(),oxygenReading.toInt(),user,dateTime)
+                }
             }
         }
     }
@@ -86,7 +98,8 @@ class TakeReadingActivity : AppCompatActivity() {
             }
             if(user!= null)
                 showReadingView(size,
-                    LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))!!)
+                    LocalDateTime.now().
+                    format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))!!)
         }
     }
 
