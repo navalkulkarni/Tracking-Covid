@@ -16,4 +16,5 @@
     <string name="confirm_reading">Enter Reading</string>
     <string name="oxygen_reading">Enter Oxygen Reading</string>
     <string name="temp_reading">Enter Temp Reading</string>
+    <string name="cancel_text">Sorry, but this App requires Internet in Order to Run.Please enable Mobile Data or Wifi</string>
 </resources>
