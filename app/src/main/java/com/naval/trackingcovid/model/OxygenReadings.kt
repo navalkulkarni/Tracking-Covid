@@ -3,6 +3,7 @@ package com.naval.trackingcovid.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity(tableName = "Oxygen_Readings")
@@ -21,6 +22,9 @@ data class OxygenReadings(
     val oxygenReadings: MutableList<String>,
 
     @ColumnInfo(name = "owner_id")
-    val userOwnerId: String?
+    val userOwnerId: String?,
+
+    @ColumnInfo(name="owner_date")
+    val date : LocalDate
 ) {
 }

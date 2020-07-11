@@ -10,6 +10,7 @@ import java.sql.Date
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalDateTime.ofInstant
 import java.time.ZoneOffset
 import java.util.*
 
@@ -46,6 +47,20 @@ class Converters{
         @JvmStatic
         fun dateToTimestamp(date: LocalDateTime?): Long? {
             return date?.atZone(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        @TypeConverter
+        @JvmStatic
+        fun fromTimestampToLocalDate(value: Long?): LocalDate? {
+            return value?.let { LocalDate.ofEpochDay(value) }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        @TypeConverter
+        @JvmStatic
+        fun localDateToTimestamp(date: LocalDate?): Long? {
+            return date?.toEpochDay()
         }
 
     }

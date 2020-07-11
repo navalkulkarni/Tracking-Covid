@@ -19,6 +19,7 @@ import com.naval.trackingcovid.utils.MailSender
 import com.naval.trackingcovid.utils.Validation
 import kotlinx.android.synthetic.main.take_reading_activity.*
 import java.lang.IllegalArgumentException
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -33,7 +34,8 @@ class TakeReadingActivity : AppCompatActivity() {
     lateinit var userInfoTextView: TextView
     @RequiresApi(Build.VERSION_CODES.O)
     var user:User? = User("","", LocalDateTime.now())
-   lateinit var toast: Toast
+
+    lateinit var toast: Toast
     lateinit var covidDB : DatabaseService
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -71,7 +73,9 @@ class TakeReadingActivity : AppCompatActivity() {
                 readingListOfUser.temperatureReadings.add(tempReading)
                 readingListOfUser.oxygenReadings.add(oxygenReading)
                 covidDB.oxygenReadingDao().updateReading(readingListOfUser)
+                Log.d(TAG,user.toString())
                 Log.d(TAG,findReadingListOfUser(user).toString())
+                Log.d(TAG,covidDB.dateWithReadingsDao().getAllDaysWithReadings().get(0).oxygenReadingsList.toString())
                 val size =setReadingLeftTextView(readingListOfUser)
                 readingRemainingTextView.text =  "$size readings left"
                 if(!result){
@@ -169,7 +173,7 @@ class TakeReadingActivity : AppCompatActivity() {
         val firstList = OxygenReadings(0,dateTime,
             tempReadingListForFirstTimeUser,
             readingListForFirstTimeUser,
-            user?.mobileNo)
+            user?.mobileNo, LocalDate.now())
         covidDB.oxygenReadingDao().insertReading(firstList)
         val size = setReadingLeftTextView(firstList)
         readingRemainingTextView.text =  "$size readings left for today"
