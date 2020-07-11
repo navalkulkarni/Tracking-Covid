@@ -16,12 +16,14 @@ import com.google.android.material.textfield.TextInputEditText
 import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
 import com.naval.trackingcovid.model.User
+import com.naval.trackingcovid.utils.LoadingDialog
 import com.naval.trackingcovid.utils.Validation
 import com.naval.trackingcovid.utils.Validation.Companion.both_inputs_correct
 import com.naval.trackingcovid.utils.Validation.Companion.both_inputs_wrong
 import com.naval.trackingcovid.utils.Validation.Companion.full_name_wrong
 import com.naval.trackingcovid.utils.Validation.Companion.mobile_number_wrong
 import kotlinx.android.synthetic.main.add_user_activity.*
+import kotlinx.android.synthetic.main.take_reading_activity.*
 import java.sql.RowId
 import java.time.LocalDateTime
 import kotlin.time.Duration
@@ -31,12 +33,12 @@ import kotlin.time.seconds
 class AddUserActivity : AppCompatActivity(){
 
     val TAG = "AddUserActivity"
+    val dialogText = "Creating User..."
     lateinit var fullNameEditText : TextInputEditText
     lateinit var mobNumberEditText : TextInputEditText
     lateinit var user : User
     lateinit var covidDB : DatabaseService
     lateinit var toast: Toast
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -59,6 +61,8 @@ class AddUserActivity : AppCompatActivity(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupClickListeners() {
+
+
         createUserButton.setOnClickListener {
 
             if(validations()){
@@ -66,9 +70,9 @@ class AddUserActivity : AppCompatActivity(){
                                 mobileNo = mobNumberEditText.text.toString(),
                                 createdDate = LocalDateTime.now())
                 insertUserToDb(user)
-
-                startTakingReadingButton.visibility = View.VISIBLE
+                LoadingDialog.dismiss()
             }
+            startTakingReadingButton.visibility = View.VISIBLE
         }
 
         startTakingReadingButton.setOnClickListener {
@@ -79,9 +83,11 @@ class AddUserActivity : AppCompatActivity(){
 
 
     private fun insertUserToDb(user: User) {
-
         val userDao = covidDB.userDao()
         val rowId = userDao.insertUser(user)
+        LoadingDialog.show(this,dialogText)
+        fullNameEditText.text?.clear()
+        mobNumberEditText.text?.clear()
     }
 
 
@@ -93,10 +99,7 @@ class AddUserActivity : AppCompatActivity(){
         val validationResult = Validation.validateUserCreationInput(fullName, mobileNumber)
 
         when(validationResult){
-            0 -> {
-                toast.setText(both_inputs_correct)
-                toast.show()
-                return true}
+            0 -> return true
             1 -> {
                 toast.setText(both_inputs_wrong)
                 toast.show()

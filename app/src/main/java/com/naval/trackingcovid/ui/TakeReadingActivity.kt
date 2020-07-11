@@ -16,6 +16,7 @@ import com.naval.trackingcovid.R
 import com.naval.trackingcovid.db.DatabaseService
 import com.naval.trackingcovid.model.OxygenReadings
 import com.naval.trackingcovid.model.User
+import com.naval.trackingcovid.utils.LoadingDialog
 import com.naval.trackingcovid.utils.MailSender
 import com.naval.trackingcovid.utils.Validation
 import kotlinx.android.synthetic.main.take_reading_activity.*
@@ -29,6 +30,8 @@ import java.time.format.FormatStyle
 class TakeReadingActivity : AppCompatActivity() {
 
     val TAG = "TakeReadingActivity"
+    val dialogTextForReading:String = "Saving Reading..."
+    val dialogTextForSearchUser:String = "Searching..."
     lateinit var mobileNumberEditText: EditText
     lateinit var oxygenReadingEditText: EditText
     lateinit var tempReadingEditText: EditText
@@ -64,6 +67,7 @@ class TakeReadingActivity : AppCompatActivity() {
             if(readingListOfUser == null)
             {
                 insertReadingToDB()
+                LoadingDialog.dismiss()
                 if(!result){
                     MailSender.sendEmailToAuthorities(this,tempReading.toInt(),oxygenReading.toInt(),user,dateTime)
                 }
@@ -77,6 +81,8 @@ class TakeReadingActivity : AppCompatActivity() {
                     readingListOfUser.temperatureReadings.add(tempReading)
                     readingListOfUser.oxygenReadings.add(oxygenReading)
                     covidDB.oxygenReadingDao().updateReading(readingListOfUser)
+                    LoadingDialog.show(this,dialogTextForReading)
+                    LoadingDialog.dismiss()
                     val size = setReadingLeftTextView(readingListOfUser)
                     readingRemainingTextView.text = "$size readings left"
                     if (!result) {
@@ -89,6 +95,7 @@ class TakeReadingActivity : AppCompatActivity() {
                         )
                     }
                     clearTextViews()
+
                 }
             }
 
@@ -143,6 +150,8 @@ class TakeReadingActivity : AppCompatActivity() {
                 else{
                     size = setReadingLeftTextView(readingListOfUser)
                 }
+                LoadingDialog.show(this,dialogTextForSearchUser)
+
                 showReadingView(size,
                     LocalDateTime.now().
                     format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))!!)
@@ -158,6 +167,7 @@ class TakeReadingActivity : AppCompatActivity() {
     }
 
     private fun showReadingView(size: String, format: String) {
+        LoadingDialog.dismiss()
         readingRemainingTextView.text = "$size readings left for today"
         readingRemainingTextView.visibility = View.VISIBLE
         userInfoTextView.visibility = View.VISIBLE
@@ -193,6 +203,7 @@ class TakeReadingActivity : AppCompatActivity() {
             readingListForFirstTimeUser,
             user?.mobileNo, LocalDate.now())
         covidDB.oxygenReadingDao().insertReading(firstList)
+        LoadingDialog.show(this,dialogTextForReading)
         val size = setReadingLeftTextView(firstList)
         readingRemainingTextView.text =  "$size readings left for today"
     }

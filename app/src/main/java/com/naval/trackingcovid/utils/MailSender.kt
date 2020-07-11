@@ -29,8 +29,13 @@ class MailSender {
         @RequiresApi(Build.VERSION_CODES.O)
         fun sendEmailToAuthorities(takeReadingActivity: TakeReadingActivity, tempReading: Int, oxygenReading: Int, user: User?, dateTimeOfReading: LocalDateTime) {
 
-            bodyOfMail = openingText + "\n ${user?.fullName}" + "\n His Mobile Number is : ${user?.mobileNo}" + "\n His Temperature Reading is : ${tempReading}" + "\n His Oxygen Reading is : ${oxygenReading}" + "\n Time at which reading was taken is : ${dateTimeOfReading.format(
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))}"
+            bodyOfMail = openingText + "\n ${user?.fullName}" +
+                    "\n His Mobile Number is : ${user?.mobileNo}" +
+                    "\n His Temperature Reading is : ${tempReading}" +
+                    "\n His Oxygen Reading is : ${oxygenReading}" +
+                    "\n Time at which reading was taken is : " +
+                    "${dateTimeOfReading.format(
+                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))}"
 
             val properties = Properties()
             properties.put("mail.smtp.auth","true")
