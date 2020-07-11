@@ -3,6 +3,7 @@ package com.naval.trackingcovid.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.transition.Visibility
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -68,23 +69,41 @@ class TakeReadingActivity : AppCompatActivity() {
                 }
                 clearTextViews()
             }
-            else{
+            else {
                 readingListOfUser.readingDateTime = dateTime
-                readingListOfUser.temperatureReadings.add(tempReading)
-                readingListOfUser.oxygenReadings.add(oxygenReading)
-                covidDB.oxygenReadingDao().updateReading(readingListOfUser)
-                Log.d(TAG,user.toString())
-                Log.d(TAG,findReadingListOfUser(user).toString())
-                Log.d(TAG,covidDB.dateWithReadingsDao().getAllDaysWithReadings().get(0).oxygenReadingsList.toString())
-                val size =setReadingLeftTextView(readingListOfUser)
-                readingRemainingTextView.text =  "$size readings left"
-                if(!result){
-                    MailSender.sendEmailToAuthorities(this,tempReading.toInt(),oxygenReading.toInt(),user,dateTime)
+                if (readingListOfUser.temperatureReadings.size >= 4 || readingListOfUser.oxygenReadings.size >= 4)
+                    hideReadingEditText()
+                else {
+                    readingListOfUser.temperatureReadings.add(tempReading)
+                    readingListOfUser.oxygenReadings.add(oxygenReading)
+                    covidDB.oxygenReadingDao().updateReading(readingListOfUser)
+                    val size = setReadingLeftTextView(readingListOfUser)
+                    readingRemainingTextView.text = "$size readings left"
+                    if (!result) {
+                        MailSender.sendEmailToAuthorities(
+                            this,
+                            tempReading.toInt(),
+                            oxygenReading.toInt(),
+                            user,
+                            dateTime
+                        )
+                    }
+                    clearTextViews()
                 }
-                clearTextViews()
             }
+
         }
     }
+
+    private fun hideReadingEditText() {
+        Toast.makeText(this,
+            "No more readings allowed for today for this user",Toast.LENGTH_LONG).show()
+        tempReadingEditText.visibility = View.GONE
+        oxygenReadingEditText.visibility = View.GONE
+
+    }
+
+
 
     private fun clearTextViews() {
         userInfoTextView.text = ""
@@ -114,7 +133,6 @@ class TakeReadingActivity : AppCompatActivity() {
             }catch (e: IllegalArgumentException)
             {
                 e.printStackTrace()
-
             }
 
             if(user!=null)

@@ -1,13 +1,16 @@
 package com.naval.trackingcovid.ui
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.naval.trackingcovid.R
@@ -21,6 +24,9 @@ import com.naval.trackingcovid.utils.Validation.Companion.mobile_number_wrong
 import kotlinx.android.synthetic.main.add_user_activity.*
 import java.sql.RowId
 import java.time.LocalDateTime
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.seconds
 
 class AddUserActivity : AppCompatActivity(){
 
@@ -30,6 +36,7 @@ class AddUserActivity : AppCompatActivity(){
     lateinit var user : User
     lateinit var covidDB : DatabaseService
     lateinit var toast: Toast
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -59,6 +66,7 @@ class AddUserActivity : AppCompatActivity(){
                                 mobileNo = mobNumberEditText.text.toString(),
                                 createdDate = LocalDateTime.now())
                 insertUserToDb(user)
+
                 startTakingReadingButton.visibility = View.VISIBLE
             }
         }
@@ -69,11 +77,11 @@ class AddUserActivity : AppCompatActivity(){
         }
     }
 
-    private fun insertUserToDb(user: User) : String {
+
+    private fun insertUserToDb(user: User) {
+
         val userDao = covidDB.userDao()
         val rowId = userDao.insertUser(user)
-
-       return rowId.toString()
     }
 
 
