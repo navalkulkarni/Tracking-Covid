@@ -19,9 +19,9 @@ class MailSender {
 
     companion object{
 
-        val sMail: String = "navalapps@gmail.com"
-        val passWord : String = "Vindiesel##1"
-        val recipientMail = "navalapps@gmail.com"
+        val sMail: String = "<Enter your email>"
+        val passWord : String = "<Enter your password>"
+        val recipientMail = "<Enter recipient email>"
         val openingText = "Following person is Suspicious :"
         val subjectOfMail = "URGENT!!!Suspicious Reading Recorded"
         var bodyOfMail = ""
